@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="img/mark.png">
+<title>Bloombliss Crystaltea</title>
+<meta name="description" content="Bloombliss Crystaltea: a crystal of premium tea and edible flowers that blooms in your cup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Figtree:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a night-time tea theater. The cup is the stage, the page is the programme. Single dark look by choice. */
+:root{
+  --stage:#0b1d16;      /* deep forest, the brand green after dark */
+  --stage-2:#11281f;
+  --stage-3:#183428;
+  --leaf:#2f5a43;
+  --gold:#d0aa62;       /* the logo's gold */
+  --gold-soft:#e7cf9c;
+  --cream:#f4ecdc;
+  --muted:#a7b6aa;
+  --line:rgba(231,207,156,.18);
+  --petal:#e6a19a;
+  --tea:#d0aa62;        /* set per tea by script */
+  --f-display:"Forum","Cormorant Garamond","Times New Roman",serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"DM Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --gutter:clamp(16px,4vw,48px);
+  --max:1180px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--stage);color:var(--cream);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;line-height:1.05;margin:0;text-wrap:balance;letter-spacing:.01em}
+p{margin:0}
+.wrap{max-width:var(--max);margin-inline:auto;padding-inline:var(--gutter)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(11,29,22,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand .mark{width:34px;height:34px;border-radius:50%;background:var(--cream);display:grid;place-items:center;flex:none}
+.brand .mark img{width:28px;height:auto}
+.brand span{font-family:var(--f-display);font-size:22px;letter-spacing:.12em}
+.nav ul{display:flex;gap:clamp(12px,2.5vw,28px);list-style:none;margin:0;padding:0;font-size:14px}
+.nav ul a{text-decoration:none;color:var(--muted);transition:color .2s}
+.nav ul a:hover{color:var(--cream)}
+@media (max-width:640px){.nav ul li:not(:last-child){display:none}}
+
+/* hero */
+.hero{position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;gap:clamp(16px,4vw,56px);padding-block:clamp(28px,6vw,72px) clamp(24px,4vw,48px)}
+.hero h1{font-size:clamp(46px,8.4vw,112px);color:var(--cream)}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .lede{max-width:34ch;margin-top:22px;font-size:clamp(17px,1.6vw,19px);color:#d8dccf}
+.hero .facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.hero .facts b{color:var(--gold-soft);font-weight:500}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:13px 22px;font:500 15px/1 var(--f-body);text-decoration:none;cursor:pointer;border:1px solid var(--gold);transition:background .25s,color .25s,transform .25s}
+.btn.solid{background:var(--gold);color:var(--stage)}
+.btn.solid:hover{background:var(--gold-soft)}
+.btn.ghost{background:transparent;color:var(--gold-soft)}
+.btn.ghost:hover{background:rgba(208,170,98,.12)}
+.btn:active{transform:scale(.97)}
+.stage-box{position:relative;aspect-ratio:1/1.02;max-width:100%;width:100%}
+.stage-box canvas{position:absolute;inset:0;width:100%;height:100%}
+.now{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.now b{color:var(--tea);font-weight:500;transition:color .6s}
+@media (max-width:820px){
+  .hero .wrap{grid-template-columns:1fr}
+  .hero .stage-box{order:-1;max-width:460px;margin-inline:auto}
+}
+
+/* marquee */
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding-block:14px;background:var(--stage-2)}
+.marquee .track{display:flex;gap:40px;width:max-content;animation:slide 48s linear infinite;font-family:var(--f-display);font-size:clamp(20px,2.4vw,28px);color:var(--gold-soft);white-space:nowrap}
+.marquee .track span{display:inline-flex;align-items:center;gap:40px}
+.marquee .track span::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--petal);opacity:.8}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* sections */
+section{scroll-margin-top:70px}
+.sec{padding-block:clamp(64px,9vw,120px)}
+.sec-head{display:grid;gap:14px;max-width:44rem;margin-bottom:clamp(32px,5vw,56px)}
+.sec-head h2{font-size:clamp(36px,5.2vw,64px)}
+.sec-head p{color:#cfd4c7;max-width:58ch}
+
+/* ritual */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.5vw,28px);list-style:none;margin:0;padding:0;counter-reset:step}
+.step{position:relative;border-top:1px solid var(--line);padding-top:22px;display:grid;gap:14px;align-content:start}
+.step .n{font-family:var(--f-mono);font-size:12px;color:var(--gold);letter-spacing:.14em}
+.step h3{font-size:clamp(26px,2.6vw,32px)}
+.step p{color:#cfd4c7;max-width:34ch}
+.step .ill{height:150px;border-radius:18px;background:radial-gradient(120% 90% at 50% 100%,var(--stage-3),var(--stage-2));display:grid;place-items:center;overflow:hidden}
+.step .ill svg{width:120px;height:120px}
+.big{font-family:var(--f-mono);font-size:13px;color:var(--gold-soft)}
+@media (max-width:820px){.steps{grid-template-columns:1fr}}
+/* ritual micro-animations */
+.kettle-water{animation:pour 3.2s ease-in-out infinite;transform-origin:60px 112px}
+@keyframes pour{0%,15%{transform:scaleY(.15)}60%,85%{transform:scaleY(1)}100%{transform:scaleY(.15)}}
+.stream{stroke-dasharray:6 8;animation:flow .8s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-28}}
+.drop-ball{animation:drop 3.2s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes drop{0%{transform:translateY(-46px);opacity:0}15%{opacity:1}45%,80%{transform:translateY(0);opacity:1}100%{transform:translateY(0);opacity:0}}
+.timer-ring{stroke-dasharray:283;animation:ring 5s linear infinite;transform:rotate(-90deg);transform-origin:60px 60px}
+@keyframes ring{from{stroke-dashoffset:283}to{stroke-dashoffset:0}}
+.bloom-petal{transform-origin:60px 60px;animation:unfurl 5s ease-out infinite}
+@keyframes unfurl{0%{transform:scale(.2) rotate(-40deg);opacity:.2}60%,100%{transform:scale(1) rotate(0);opacity:1}}
+
+/* teas */
+#teas{background:linear-gradient(180deg,var(--stage) 0%,var(--stage-2) 30%,var(--stage-2) 100%)}
+.tea-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:center}
+.tea-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.tea-tab{appearance:none;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:9px 16px;font:500 14px/1 var(--f-body);cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .25s}
+.tea-tab i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.tea-tab:hover{color:var(--cream);border-color:var(--gold)}
+.tea-tab[aria-selected="true"]{background:var(--cream);color:var(--stage);border-color:var(--cream)}
+.dayline{position:relative;height:56px;margin-bottom:22px}
+.dayline svg{width:100%;height:100%;overflow:visible}
+.tea-name{font-size:clamp(44px,6vw,76px);color:var(--tea);transition:color .6s}
+.tea-photo{position:relative;margin:0 0 22px;width:100%;max-width:100%;aspect-ratio:16/10;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:radial-gradient(90% 80% at 50% 60%,var(--stage-3),var(--stage))}
+.tea-photo img,.tea-photo canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tea-photo img{animation:photoIn .7s cubic-bezier(.2,.7,.2,1)}
+@keyframes photoIn{from{transform:scale(1.06);opacity:0}}
+.tea-photo figcaption{position:absolute;left:14px;bottom:12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);background:rgba(11,29,22,.55);padding:5px 9px;border-radius:999px}
+
+/* burst */
+.burst{position:relative;height:260vh;background:var(--stage)}
+.burst .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:grid}
+.burst canvas{position:absolute;inset:0;width:100%;height:100%}
+.burst .copy-b{position:relative;z-index:1;align-self:end;padding-block:0 clamp(28px,6vh,64px);display:grid;gap:10px;pointer-events:none}
+.burst .copy-b h2{font-size:clamp(34px,5vw,64px)}
+.burst .phase{font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.burst .phase-line{max-width:40ch;color:#d8dccf}
+.burst .bar{height:2px;background:var(--line);border-radius:2px;overflow:hidden;max-width:320px}
+.burst .bar i{display:block;height:100%;width:0;background:var(--gold)}
+.burst .play{position:absolute;z-index:2;right:var(--gutter);top:calc(env(safe-area-inset-top,0px) + 76px);appearance:none;border:1px solid var(--line);background:rgba(11,29,22,.6);color:var(--gold-soft);border-radius:999px;padding:8px 14px;font:500 13px/1 var(--f-body);cursor:pointer}
+.burst .play:hover{border-color:var(--gold)}
+.tea-when{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.tea-mood{font-size:clamp(18px,1.7vw,21px);margin-top:18px;max-width:36ch;color:#e3e3d6}
+.ingredients{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;list-style:none;padding:0}
+.ingredients li{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:#d8dccf;animation:pop .5s both}
+@keyframes pop{from{transform:translateY(8px);opacity:0}}
+.tea-price{display:flex;gap:18px;flex-wrap:wrap;margin-top:28px;font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.tea-price b{color:var(--gold-soft);font-weight:500}
+.tea-stage{position:relative;aspect-ratio:1/1.05;width:100%;max-width:560px;margin-inline:auto;border-radius:28px;background:radial-gradient(80% 70% at 50% 40%,rgba(255,255,255,.05),transparent 70%)}
+.tea-stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.replay{position:absolute;right:14px;top:14px;appearance:none;border:1px solid var(--line);background:rgba(11,29,22,.6);color:var(--gold-soft);border-radius:999px;padding:8px 14px;font:500 13px/1 var(--f-body);cursor:pointer}
+.replay:hover{border-color:var(--gold)}
+@media (max-width:820px){.tea-grid{grid-template-columns:1fr}.tea-stage{max-width:440px}}
+
+/* inside */
+.inside{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,5vw,72px);align-items:start}
+.inside .sec-head{margin-bottom:0}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.stat{background:var(--stage);padding:clamp(18px,2.4vw,28px);display:grid;gap:6px;align-content:start}
+.stat .v{font-family:var(--f-display);font-size:clamp(40px,5vw,60px);color:var(--gold-soft);font-variant-numeric:tabular-nums;line-height:1}
+.stat .v small{font-size:.42em;color:var(--muted);margin-left:4px}
+.stat .k{font-size:14px;color:#cfd4c7}
+@media (max-width:820px){.inside{grid-template-columns:1fr}}
+
+/* story */
+.story{position:relative;overflow:hidden;background:var(--stage-3)}
+.story .wrap{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,5vw,72px);align-items:center}
+.story blockquote{margin:0;font-family:var(--f-display);font-size:clamp(28px,3.6vw,46px);line-height:1.18;color:var(--cream);text-wrap:balance}
+.story blockquote span{color:var(--gold)}
+.story .side{display:grid;gap:18px;color:#d3d8cb}
+.story .side h3{font-size:24px;color:var(--gold-soft)}
+.story .side ul{margin:0;padding-left:18px;display:grid;gap:8px}
+@media (max-width:820px){.story .wrap{grid-template-columns:1fr}}
+.petals-bg{position:absolute;inset:0;pointer-events:none;opacity:.5}
+
+/* gifts */
+.gifts{display:block}
+.gifts .gift.intro{max-width:720px}
+.hamper-rail{overflow:hidden;margin-top:clamp(28px,4vw,44px);padding-block:10px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.hamper-track{display:flex;width:max-content;animation:hamperSlide 70s linear infinite}
+.hamper-rail:hover .hamper-track,.hamper-rail:focus-within .hamper-track{animation-play-state:paused}
+.hamper-set{display:flex;gap:clamp(14px,2vw,22px);padding-right:clamp(14px,2vw,22px)}
+.hamper-set .gift{width:clamp(230px,24vw,310px);flex:none}
+@keyframes hamperSlide{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@media (prefers-reduced-motion:reduce){.hamper-rail{overflow-x:auto;-webkit-mask-image:none;mask-image:none}.hamper-track{transform:none!important}}
+.gift{display:grid;grid-template-rows:auto 1fr;border-radius:20px;overflow:hidden;background:var(--stage-2);border:1px solid var(--line);transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .3s}
+.gift:hover{transform:translateY(-6px);border-color:var(--gold)}
+.gift .ph{aspect-ratio:4/5;overflow:hidden;max-width:100%}
+.gift .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.gift:hover .ph img{transform:scale(1.05)}
+.gift .body{padding:18px 20px 22px;display:grid;gap:8px;align-content:start}
+.gift h3{font-size:24px}
+.gift .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.gift .price{color:var(--gold-soft);font-size:15px}
+.gift p{font-size:14px;color:#cfd4c7}
+.gift.intro{background:var(--cream);color:var(--stage);border-color:transparent;grid-template-rows:1fr}
+.gift.intro:hover{transform:none}
+.gift.intro .body{padding:clamp(22px,3vw,34px);gap:16px;align-content:space-between}
+.gift.intro h3{font-size:clamp(30px,3vw,40px)}
+.gift.intro p{color:#33463b;font-size:15px}
+.gift.intro .eyebrow{color:#7a5a1e}
+.gift.intro ul{margin:0;padding-left:18px;font-size:14px;color:#33463b;display:grid;gap:4px}
+
+
+/* shop */
+.shop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,72px)}
+.links{display:grid;gap:10px}
+.link{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 20px;border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:border-color .25s,background .25s}
+.link:hover{border-color:var(--gold);background:rgba(208,170,98,.06)}
+.link b{font-family:var(--f-display);font-weight:400;font-size:24px}
+.link span{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.link .arr{transition:transform .25s;color:var(--gold)}
+.link:hover .arr{transform:translateX(4px)}
+.contact{display:grid;gap:14px;align-content:start}
+.contact .card{border-radius:20px;background:var(--stage-2);border:1px solid var(--line);padding:22px;display:grid;gap:14px}
+.copyrow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.copyrow .val{font-family:var(--f-mono);font-size:15px;user-select:all;overflow-wrap:anywhere;min-width:0}
+.copyrow .lab{font-size:12px;color:var(--muted);display:block;font-family:var(--f-body)}
+.copy{appearance:none;border:1px solid var(--line);background:transparent;color:var(--gold-soft);border-radius:999px;padding:7px 14px;font:500 13px/1 var(--f-body);cursor:pointer}
+.copy:hover{border-color:var(--gold)}
+@media (max-width:820px){.shop{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line);padding-block:28px;color:var(--muted);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+/* scroll rise (content stays visible at rest) */
+.rise{transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.rise.pre{transform:translateY(28px)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark"><img src="img/mark.png" alt=""></span><span>BLOOMBLISS</span></a>
+    <ul>
+      <li><a href="#ritual">Ritual</a></li>
+      <li><a href="#teas">Teas</a></li>
+      <li><a href="#gifts">Gifts</a></li>
+      <li><a href="#shop">Shop</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="rise">
+      <p class="eyebrow">Crystaltea by Bloombliss</p>
+      <h1 style="margin-top:16px">The Theater <em>of Tea</em></h1>
+      <p class="lede">A clear crystal of premium loose-leaf tea and edible flowers. Pour hot water over it and watch the shell melt away as the flowers bloom in your cup.</p>
+      <div class="facts"><span><b>250–300</b> ml</span><span><b>90–100</b> °C</span><span><b>3–5</b> min bloom</span><span><b>Rp30.000</b> each</span></div>
+      <div class="ctas">
+        <a class="btn solid" href="#shop">Shop the collection</a>
+        <button class="btn ghost" id="heroReplay" type="button">Watch it bloom</button>
+      </div>
+    </div>
+    <div class="stage-box">
+      <canvas id="heroCanvas" aria-label="Animation of a Bloombliss crystaltea melting in hot water and blooming into tea and flowers" role="img"></canvas>
+      <p class="now">Now blooming · <b id="heroNow">Morning Dew</b></p>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="track" id="marquee"></div>
+</div>
+
+<section id="ritual" class="sec">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <p class="eyebrow">The brewing ritual</p>
+      <h2>Three steps to a slower minute</h2>
+      <p>Each crystaltea is a handmade ball of isomalt with a signature tea blend sealed inside. You only need a cup and a kettle.</p>
+    </div>
+    <ol class="steps">
+      <li class="step rise">
+        <div class="ill" aria-hidden="true">
+          <svg viewBox="0 0 120 120"><defs><clipPath id="cupc"><path d="M34 46h52l-6 62H40z"/></clipPath></defs>
+            <path class="stream" d="M98 6 C 90 20, 70 26, 62 50" stroke="#cfe3ea" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>
+            <g clip-path="url(#cupc)"><rect class="kettle-water" x="30" y="46" width="60" height="66" fill="#cfe3ea" opacity=".35"/></g>
+            <path d="M34 46h52l-6 62H40z" fill="none" stroke="#e7cf9c" stroke-width="1.6"/>
+            <text x="60" y="34" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="#e7cf9c">95°C</text>
+          </svg>
+        </div>
+        <span class="n">STEP 1</span>
+        <h3>Heat the water</h3>
+        <p>Prepare 250–300 ml of hot water at 90–100°C.</p>
+      </li>
+      <li class="step rise">
+        <div class="ill" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <g class="drop-ball"><circle cx="60" cy="84" r="16" fill="rgba(255,255,255,.12)" stroke="#f4ecdc" stroke-width="1.4"/><ellipse cx="54" cy="78" rx="5" ry="2.6" fill="#fff" opacity=".7" transform="rotate(-30 54 78)"/><circle cx="62" cy="88" r="3" fill="#e6a19a"/><circle cx="56" cy="90" r="2.4" fill="#f2a33a"/><circle cx="66" cy="82" r="2.2" fill="#86aee8"/></g>
+            <path d="M34 46h52l-6 62H40z" fill="none" stroke="#e7cf9c" stroke-width="1.6"/>
+          </svg>
+        </div>
+        <span class="n">STEP 2</span>
+        <h3>Place the crystal</h3>
+        <p>Set one Bloombliss crystaltea in your cup, then pour the water over it.</p>
+      </li>
+      <li class="step rise">
+        <div class="ill" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="45" fill="none" stroke="rgba(231,207,156,.18)" stroke-width="3"/>
+            <circle class="timer-ring" cx="60" cy="60" r="45" fill="none" stroke="#d0aa62" stroke-width="3" stroke-linecap="round"/>
+            <g class="bloom-petal"><g fill="#e6a19a"><ellipse cx="60" cy="44" rx="7" ry="13"/><ellipse cx="60" cy="76" rx="7" ry="13"/><ellipse cx="44" cy="60" rx="13" ry="7"/><ellipse cx="76" cy="60" rx="13" ry="7"/></g><circle cx="60" cy="60" r="6" fill="#f2c84b"/></g>
+          </svg>
+        </div>
+        <span class="n">STEP 3</span>
+        <h3>Watch it bloom</h3>
+        <p>Give it 3–5 minutes while the shell melts and the flowers open. Then enjoy the moment.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="burst" id="burst" aria-label="Slow-motion animation of a crystaltea bursting open">
+  <div class="pin">
+    <canvas id="burstCanvas" aria-hidden="true"></canvas>
+    <button class="play" id="burstPlay" type="button">Play the burst</button>
+    <div class="wrap copy-b" style="width:100%">
+      <p class="phase" id="burstPhase">Sealed</p>
+      <h2 id="burstTitle">The bloom, in slow motion</h2>
+      <p class="phase-line" id="burstLine">Keep scrolling to break the shell.</p>
+      <div class="bar"><i id="burstBar"></i></div>
+    </div>
+  </div>
+</section>
+
+<section id="teas" class="sec">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <p class="eyebrow">Five blends, morning to night</p>
+      <h2>A crystaltea for every hour</h2>
+      <p>Each blend is named for a time of day. Pick one to brew it in the cup.</p>
+    </div>
+    <div class="tea-grid">
+      <div>
+        <div class="tea-tabs" role="tablist" aria-label="Tea blends" id="teaTabs"></div>
+        <div class="dayline" aria-hidden="true"><svg viewBox="0 0 500 56" preserveAspectRatio="none" id="dayline"></svg></div>
+        <div role="tabpanel" id="teaPanel" aria-live="polite">
+          <figure class="tea-photo" id="teaPhoto">
+            <canvas id="teaPortrait" role="img" aria-label="The selected crystaltea, sealed in its clear shell"></canvas>
+            <img id="teaImg" alt="" hidden>
+            <figcaption id="teaCap">Crystaltea · Morning Dew</figcaption>
+          </figure>
+          <h3 class="tea-name" id="teaName">Morning Dew</h3>
+          <p class="tea-when" id="teaWhen">Morning</p>
+          <p class="tea-mood" id="teaMood"></p>
+          <ul class="ingredients" id="teaIng"></ul>
+          <div class="tea-price"><span><b>Rp30.000</b> per crystaltea</span><span>Signature set of <b>6</b></span></div>
+        </div>
+      </div>
+      <div class="tea-stage">
+        <canvas id="teaCanvas" role="img" aria-label="The selected blend blooming in a glass cup"></canvas>
+        <button class="replay" id="teaReplay" type="button">Brew again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="inside">
+  <div class="wrap inside">
+    <div class="sec-head rise">
+      <p class="eyebrow">What the shell is made of</p>
+      <h2>A crystal you can drink</h2>
+      <p>The clear shell is isomalt, a low-calorie sweetener made from beet sugar and approved by the FDA and EFSA. It melts into the tea and adds a light sweetness without overpowering the leaves and flowers.</p>
+    </div>
+    <div class="stats rise">
+      <div class="stat"><span class="v" data-count="2">2<small>kcal/g</small></span><span class="k">About half the calories of table sugar</span></div>
+      <div class="stat"><span class="v" data-count="9">9<small>GI</small></span><span class="k">Low glycemic index</span></div>
+      <div class="stat"><span class="v">45–65<small>%</small></span><span class="k">As sweet as sugar, so the tea still leads</span></div>
+      <div class="stat"><span class="v">0<small>cavities</small></span><span class="k">Non-cariogenic, so it is kind to teeth</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="story sec" id="story">
+  <canvas class="petals-bg" id="petalsBg" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <blockquote class="rise">Bloombliss began as a small university project, a simple idea made with curiosity and care. <span>It keeps growing, one thoughtful moment at a time.</span></blockquote>
+    <div class="side rise">
+      <h3>Made for me-time</h3>
+      <p>Coffee keeps the city moving. Bloombliss is for the pause in between: a few quiet minutes to watch something beautiful happen in your cup.</p>
+      <ul>
+        <li>Premium loose-leaf tea and real edible flowers</li>
+        <li>Handmade shells with strict food-safety standards</li>
+        <li>New blends developed through ongoing R&amp;D</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="gifts" class="sec">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <p class="eyebrow">Gifting</p>
+      <h2>Hampers that put on a show</h2>
+      <p>Special editions for Christmas, Valentine's Day, Chinese New Year and Ramadan, plus custom orders for any occasion.</p>
+    </div>
+    <div class="gifts" id="giftGrid">
+      <article class="gift intro rise">
+        <div class="body">
+          <div style="display:grid;gap:14px">
+            <p class="eyebrow">Custom orders</p>
+            <h3>Make every gift personal</h3>
+            <p>Custom hang-tag messages and tailored packaging, made with you for corporate gifts, events and weddings.</p>
+            <ul><li>Personal greeting cards</li><li>Bulk orders for souvenirs</li><li>Seasonal special editions</li></ul>
+          </div>
+          <a class="btn solid" href="https://wa.me/6282211415484" target="_blank" rel="noopener" style="justify-self:start;background:var(--stage);color:var(--cream);border-color:var(--stage)">Ask on WhatsApp</a>
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="hamper-rail" aria-label="Bloombliss hampers"><div class="hamper-track" id="hamperTrack"></div></div>
+</section>
+
+<section id="shop" class="sec" style="background:var(--stage-2)">
+  <div class="wrap">
+    <div class="sec-head rise">
+      <p class="eyebrow">Shop &amp; follow</p>
+      <h2>Bring the bloom home</h2>
+      <p>Order online, or find us at curated pop-up markets around Jakarta and Tangerang where you can watch a crystaltea bloom in person.</p>
+    </div>
+    <div class="shop">
+      <div class="links rise">
+        <a class="link" href="https://shopee.co.id/teabloombliss" target="_blank" rel="noopener"><div><b>Shopee</b><br><span>teabloombliss</span></div><span class="arr">→</span></a>
+        <a class="link" href="https://www.tokopedia.com/bloombliss-715" target="_blank" rel="noopener"><div><b>Tokopedia</b><br><span>bloombliss-715</span></div><span class="arr">→</span></a>
+        <a class="link" href="https://vt.tiktok.com/ZSaFKTf2m/" target="_blank" rel="noopener"><div><b>TikTok Shop</b><br><span>Crystaltea Bloombliss</span></div><span class="arr">→</span></a>
+        <a class="link" href="https://www.instagram.com/teabloombliss/" target="_blank" rel="noopener"><div><b>Instagram</b><br><span>@teabloombliss</span></div><span class="arr">→</span></a>
+        <a class="link" href="https://www.tiktok.com/@teabloombliss" target="_blank" rel="noopener"><div><b>TikTok</b><br><span>@teabloombliss</span></div><span class="arr">→</span></a>
+      </div>
+      <div class="contact rise">
+        <div class="card">
+          <p class="eyebrow">Business &amp; inquiries</p>
+          <div class="copyrow"><div style="min-width:0"><span class="lab">WhatsApp</span><span class="val" id="phone">+62 822 1141 5484</span></div><button class="copy" type="button" data-copy="phone">Copy</button></div>
+          <div class="copyrow"><div style="min-width:0"><span class="lab">Email</span><span class="val" id="email">teabloombliss@gmail.com</span></div><button class="copy" type="button" data-copy="email">Copy</button></div>
+          <a class="btn ghost" href="https://wa.me/6282211415484" target="_blank" rel="noopener" style="justify-self:start">Open WhatsApp</a>
+        </div>
+        <a class="link" href="https://linktr.ee/teabloombliss" target="_blank" rel="noopener"><div><b>All links</b><br><span>linktr.ee/teabloombliss</span></div><span class="arr">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><span>© 2026 Bloombliss · Crystaltea artisan tea</span><span>Bloombliss by Ana</span></div>
+</footer>
+
+<script>
+(() => {
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const TEAS = [
+  {id:'morning-dew', name:'Morning Dew', when:'Morning', ui:'#d9d27c',
+   mood:'Light, fresh, and gently uplifting. A refreshing moment to brighten your day.',
+   ing:['Green tea','Jasmine tea','White peach','Apple','Calendula','Natural muscat grape flavour'],
+   liquor:[222,204,120],
+   mix:[['leaf','#7c8f3a',5],['pearl','#a8a55a',2],['fruit','#f3d2b0',2],['fruit','#cfe08a',2],['floret','#f2a33a',4],['petal','#f7e7c9',3]]},
+  {id:'blue-horizon', name:'Blue Horizon', when:'Midday', ui:'#8fb3ec',
+   mood:'Calm, clear, and steady. For moments when you need balance and focus.',
+   ing:['Indonesian black tea','Natural bergamot','Calendula','Forget-me-not'],
+   liquor:[184,104,46],
+   mix:[['leaf','#4b3a22',6],['flower','#7fa8e8',6],['floret','#f2a33a',4],['fruit','#e9d36a',1]]},
+  {id:'amber-sunset', name:'Amber Sunset', when:'Late afternoon', ui:'#f0a050',
+   mood:'Warm, soft, and comforting. A gentle way to slow down as the day ends.',
+   ing:['Black tea','Red rose petal','Papaya','Passionfruit','Calendula','Forget-me-not'],
+   liquor:[204,116,50],
+   mix:[['leaf','#4b3a22',4],['petal','#c73a4c',5],['fruit','#f08a3c',2],['fruit','#f2c84b',1],['floret','#f2a33a',3],['flower','#86aee8',3]]},
+  {id:'scarlet-dusk', name:'Scarlet Dusk', when:'Evening', ui:'#e88a8f',
+   mood:'Soothing and quietly calming. Created for peaceful evenings and soft reflection.',
+   ing:['Green tea','Jasmine pearl','Red rose petal','Strawberry','Bergamot','Lemon','Raspberry','Vanilla','Cornflower','White peach','Calendula','Lavender'],
+   liquor:[214,124,110],
+   mix:[['leaf','#7c8f3a',3],['pearl','#a8a55a',2],['petal','#c73a4c',4],['fruit','#d8344a',2],['flower','#5f7fe0',2],['lav','#9a7fd6',4],['floret','#f2a33a',2],['fruit','#f6e27a',1]]},
+  {id:'starry-night', name:'Starry Night', when:'Night', ui:'#8b9cf0',
+   mood:'Unhurried and comforting. The perfect pause when the day feels long.',
+   ing:['Black tea','Strawberry','Blue cornflower','Calendula','Safflower'],
+   liquor:[156,68,36],
+   mix:[['leaf','#4b3a22',5],['fruit','#d8344a',2],['flower','#4f6fe0',6],['floret','#f2a33a',3],['floret','#e2462b',4]]},
+];
+
+/* marquee */
+const words = ['Jasmine pearl','Forget-me-not','Calendula','Natural bergamot','Red rose petal','White peach','Blue cornflower','Lavender','Passionfruit','Safflower','Muscat grape','Indonesian black tea'];
+const m = document.getElementById('marquee');
+const row = words.map(w=>`<span>${w}</span>`).join('');
+m.innerHTML = row + row;
+
+/* ---------- helpers ---------- */
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const easeInOut=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const easeOut=t=>1-Math.pow(1-t,3);
+const easeOutBack=t=>{const c1=1.4,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+const easeOutBounce=t=>{const n=7.5625,d=2.75;if(t<1/d)return n*t*t;if(t<2/d)return n*(t-=1.5/d)*t+.75;if(t<2.5/d)return n*(t-=2.25/d)*t+.9375;return n*(t-=2.625/d)*t+.984375};
+const rgba=(c,a)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
+function pickWeighted(mix){const tot=mix.reduce((s,m)=>s+m[2],0);let r=Math.random()*tot;for(const m of mix){if((r-=m[2])<=0)return m}return mix[0]}
+
+/* timeline (seconds) */
+const T={dropEnd:1.0,pourStart:1.1,pourEnd:3.1,disStart:2.3,disEnd:5.4,release:3.7,tintStart:3.3,tintEnd:9.5,end:13.5};
+
+/* ---------- the stage ---------- */
+class Stage{
+  constructor(canvas,{spotlight=false,loop=false,onEnd=null}={}){
+    this.c=canvas;this.ctx=canvas.getContext('2d');
+    this.spotlight=spotlight;this.loop=loop;this.onEnd=onEnd;
+    this.time=0;this.t=0;this.visible=false;this.last=0;
+    this.motes=Array.from({length:26},()=>({x:Math.random(),y:Math.random(),s:rnd(.6,1.8),v:rnd(.006,.02),p:rnd(0,6.28)}));
+    new ResizeObserver(()=>{this.resize();if(reduce)this.draw()}).observe(canvas);
+    new IntersectionObserver(es=>{this.visible=es[0].isIntersecting;if(this.visible&&!reduce)this.kick()},{threshold:.05}).observe(canvas);
+    this.resize();
+  }
+  resize(){
+    const r=this.c.getBoundingClientRect();if(!r.width)return;
+    const dpr=Math.min(2,window.devicePixelRatio||1);
+    this.c.width=Math.round(r.width*dpr);this.c.height=Math.round(r.height*dpr);
+    this.ctx.setTransform(dpr,0,0,dpr,0,0);
+    const old=this.geo;
+    this.W=r.width;this.H=r.height;
+    const cupH=this.H*.5;
+    this.cx=this.W/2;this.botY=this.H*.86;this.topY=this.botY-cupH;
+    this.topHW=Math.min(this.W*.34,cupH*.56);this.botHW=this.topHW*.8;
+    this.topRY=this.topHW*.16;this.botRY=this.botHW*.16;
+    this.R=this.botHW*.44;this.k=this.topHW/150;
+    this.geo={cx:this.cx,botY:this.botY,k:this.k};
+    if(old&&this.parts){ // rescale particles on resize
+      const sx=this.k/old.k;
+      for(const p of this.parts){p.x=this.cx+(p.x-old.cx)*sx;p.y=this.botY+(p.y-old.botY)*sx;p.ix*=sx;p.iy*=sx;p.size*=sx}
+    }
+  }
+  setTea(tea){this.tea=tea;this.reset();if(reduce){this.fastForward(T.end-1.5);this.draw()}}
+  reset(){
+    this.t=0;const k=this.k,R=this.R;
+    this.parts=Array.from({length:74},()=>{
+      const [type,color]=pickWeighted(this.tea.mix);
+      const a=rnd(0,6.283),d=Math.sqrt(Math.random())*R*.72;
+      const base={leaf:[16,24],petal:[11,17],flower:[10,13],floret:[11,15],fruit:[6,9],pearl:[6,8],lav:[10,13]}[type];
+      return{type,color,size:rnd(base[0],base[1])*k,ix:Math.cos(a)*d,iy:Math.sin(a)*d,x:0,y:0,vx:0,vy:0,
+        rot:rnd(0,6.283),vr:rnd(-3,3),buoy:(type==='leaf'||type==='pearl'||type==='fruit')?rnd(-4,16)*k:rnd(-16,4)*k,
+        phase:rnd(0,6.283),delay:rnd(0,.9),rel:false};
+    });
+    this.sugar=[];this.ripples=[];
+  }
+  fastForward(to){const dt=1/30;while(this.t<to)this.step(dt)}
+  kick(){if(this.raf)return;this.last=performance.now();const f=now=>{const dt=Math.min(.05,(now-this.last)/1000);this.last=now;this.step(dt);this.draw();if(this.visible)this.raf=requestAnimationFrame(f);else this.raf=null};this.raf=requestAnimationFrame(f)}
+  halfW(y){return lerp(this.topHW,this.botHW,clamp((y-this.topY)/(this.botY-this.topY)))}
+  level(){return easeInOut(clamp((this.t-T.pourStart)/(T.pourEnd-T.pourStart)))*.82}
+  surfaceY(){return this.botY-this.level()*(this.botY-this.topY)}
+  sphere(){
+    const restY=this.botY-this.R*.98;
+    const y=this.t<T.dropEnd?lerp(this.topY-this.H*.42,restY,easeOutBounce(clamp(this.t/T.dropEnd))):restY;
+    const d=clamp((this.t-T.disStart)/(T.disEnd-T.disStart));
+    return{x:this.cx,y,r:this.R*(1-.62*easeInOut(d)),a:1-Math.pow(d,1.4),d};
+  }
+  step(dt){
+    this.t+=dt;this.time+=dt;
+    if(this.t>T.end){
+      if(this.loop){this.onEnd&&this.onEnd();return}
+      this.t=T.end;
+    }
+    const sp=this.sphere(),sy=this.surfaceY(),k=this.k;
+    // sugar shimmer while dissolving
+    if(sp.d>0&&sp.d<1&&Math.random()<.9){
+      const a=rnd(0,6.283);
+      this.sugar.push({x:sp.x+Math.cos(a)*sp.r,y:sp.y+Math.sin(a)*sp.r,vx:rnd(-6,6)*k,vy:rnd(-30,-12)*k,life:0,max:rnd(1,2)});
+    }
+    for(const s of this.sugar){s.life+=dt;s.x+=s.vx*dt+Math.sin(this.time*3+s.y)*.2;s.y+=s.vy*dt;if(s.y<sy+2)s.life=s.max}
+    this.sugar=this.sugar.filter(s=>s.life<s.max);
+    // ripples from the pour
+    if(this.t>T.pourStart&&this.t<T.pourEnd-.1&&Math.random()<.18)this.ripples.push({r:2,a:.5});
+    for(const r of this.ripples){r.r+=40*k*dt;r.a-=.6*dt}
+    this.ripples=this.ripples.filter(r=>r.a>0);
+    // particles
+    const drag=Math.pow(.3,dt);
+    for(const p of this.parts){
+      if(!p.rel){
+        if(this.t>=T.release){
+          p.rel=true;p.x=sp.x+p.ix*.5;p.y=sp.y+p.iy*.5;
+          const sp0=rnd(70,160)*k,len=Math.hypot(p.ix,p.iy)||1;
+          p.vx=p.ix/len*sp0;p.vy=p.iy/len*sp0-rnd(20,60)*k;
+        }else continue;
+      }
+      p.vx*=drag;p.vy*=drag;p.vy+=p.buoy*dt;p.vr*=Math.pow(.6,dt);
+      p.x+=p.vx*dt+Math.sin(this.time*.9+p.phase)*7*k*dt;p.y+=p.vy*dt;p.rot+=p.vr*dt;
+      const minY=sy+p.size*.35,maxY=this.botY-p.size*.45;
+      if(p.y<minY){p.y=minY;p.vy=Math.abs(p.vy)*.2}
+      if(p.y>maxY){p.y=maxY;p.vy=-Math.abs(p.vy)*.2}
+      const hw=this.halfW(p.y)-p.size*.55;
+      if(p.x<this.cx-hw){p.x=this.cx-hw;p.vx=Math.abs(p.vx)*.4}
+      if(p.x>this.cx+hw){p.x=this.cx+hw;p.vx=-Math.abs(p.vx)*.4}
+    }
+  }
+  cupPath(ctx){
+    const{cx,topY,botY,topHW,botHW,topRY,botRY}=this;
+    ctx.beginPath();ctx.moveTo(cx-topHW,topY);ctx.lineTo(cx-botHW,botY);
+    ctx.ellipse(cx,botY,botHW,botRY,0,Math.PI,0,true);
+    ctx.lineTo(cx+topHW,topY);ctx.ellipse(cx,topY,topHW,topRY,0,0,Math.PI,true);ctx.closePath();
+  }
+  drawPart(ctx,p,scale){
+    const s=p.size*scale;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.color;
+    switch(p.type){
+      case'leaf':{ctx.beginPath();ctx.moveTo(-s,0);ctx.quadraticCurveTo(0,-s*.5,s,0);ctx.quadraticCurveTo(0,s*.5,-s,0);ctx.fill();
+        ctx.strokeStyle='rgba(0,0,0,.25)';ctx.lineWidth=Math.max(.5,s*.06);ctx.beginPath();ctx.moveTo(-s*.85,0);ctx.lineTo(s*.85,0);ctx.stroke();break}
+      case'petal':{ctx.globalAlpha=.92;ctx.beginPath();ctx.moveTo(-s*.6,0);ctx.bezierCurveTo(-s*.2,-s*.62,s*.75,-s*.5,s*.62,0);ctx.bezierCurveTo(s*.75,s*.5,-s*.2,s*.62,-s*.6,0);ctx.fill();
+        ctx.globalAlpha=.35;ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(s*.15,-s*.12,s*.3,s*.1,0,0,6.283);ctx.fill();break}
+      case'flower':{for(let i=0;i<5;i++){const a=i*1.2566;ctx.beginPath();ctx.arc(Math.cos(a)*s*.3,Math.sin(a)*s*.3,s*.27,0,6.283);ctx.fill()}
+        ctx.fillStyle='#f6d35a';ctx.beginPath();ctx.arc(0,0,s*.14,0,6.283);ctx.fill();break}
+      case'floret':{for(let i=0;i<4;i++){ctx.rotate(.785);ctx.beginPath();ctx.ellipse(0,0,s*.55,s*.085,0,0,6.283);ctx.fill()}break}
+      case'fruit':{const h=s*.5;ctx.beginPath();ctx.roundRect?ctx.roundRect(-h,-h,h*2,h*2,h*.4):ctx.rect(-h,-h,h*2,h*2);ctx.fill();
+        ctx.globalAlpha=.4;ctx.fillStyle='#fff';ctx.fillRect(-h*.6,-h*.7,h*.6,h*.25);break}
+      case'pearl':{ctx.beginPath();ctx.arc(0,0,s*.32,0,6.283);ctx.fill();ctx.strokeStyle='rgba(0,0,0,.3)';ctx.lineWidth=Math.max(.5,s*.07);ctx.beginPath();ctx.arc(0,0,s*.18,0,4);ctx.stroke();break}
+      case'lav':{for(let i=-2;i<=2;i++){ctx.beginPath();ctx.ellipse(i*s*.2,(i%2)*s*.06,s*.11,s*.07,0,0,6.283);ctx.fill()}break}
+    }
+    ctx.restore();
+  }
+  draw(){
+    const ctx=this.ctx,{W,H,cx,topY,botY,topHW,botHW,topRY,botRY,k}=this;if(!W||!this.tea)return;
+    ctx.clearRect(0,0,W,H);
+    // theater spotlight + table
+    if(this.spotlight){
+      const g=ctx.createRadialGradient(cx,H*.5,0,cx,H*.5,Math.min(W,H)*.5);
+      g.addColorStop(0,'rgba(231,207,156,.20)');g.addColorStop(.5,'rgba(231,207,156,.05)');g.addColorStop(1,'rgba(231,207,156,0)');
+      ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+      for(const m of this.motes){m.y-=m.v*(1/60);if(m.y<0){m.y=1;m.x=Math.random()}
+        ctx.fillStyle=`rgba(231,207,156,${.25+.25*Math.sin(this.time*1.5+m.p)})`;ctx.beginPath();ctx.arc(m.x*W,m.y*H,m.s,0,6.283);ctx.fill()}
+    }
+    const sh=ctx.createRadialGradient(cx,botY+botRY,0,cx,botY+botRY,botHW*1.6);
+    sh.addColorStop(0,'rgba(0,0,0,.45)');sh.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=sh;ctx.beginPath();ctx.ellipse(cx,botY+botRY*.9,botHW*1.6,botRY*2.2,0,0,6.283);ctx.fill();
+
+    const tint=easeInOut(clamp((this.t-T.tintStart)/(T.tintEnd-T.tintStart)));
+    const water=[205,228,232],L=this.tea.liquor;
+    const col=[lerp(water[0],L[0],tint),lerp(water[1],L[1],tint),lerp(water[2],L[2],tint)];
+    const lvl=this.level(),sy=this.surfaceY(),sw=this.halfW(sy);
+
+    // glow cast on table by the tea
+    if(tint>0){const gg=ctx.createRadialGradient(cx,botY+botRY,0,cx,botY+botRY,topHW*1.4);gg.addColorStop(0,rgba(L,.22*tint));gg.addColorStop(1,rgba(L,0));ctx.fillStyle=gg;ctx.beginPath();ctx.ellipse(cx,botY+botRY,topHW*1.5,botRY*3,0,0,6.283);ctx.fill()}
+
+    // back wall of glass
+    ctx.save();this.cupPath(ctx);ctx.fillStyle='rgba(255,255,255,.035)';ctx.fill();ctx.clip();
+    // liquid
+    if(lvl>0){
+      const lg=ctx.createLinearGradient(0,sy,0,botY+botRY);
+      lg.addColorStop(0,rgba(col,.30+.42*tint));lg.addColorStop(1,rgba(col.map(v=>v*.8),.42+.45*tint));
+      ctx.fillStyle=lg;ctx.fillRect(cx-topHW-2,sy,topHW*2+4,botY+botRY-sy+2);
+    }
+    // contents
+    const sp=this.sphere();
+    for(const p of this.parts){
+      if(p.rel){const u=easeOutBack(clamp((this.t-T.release-p.delay)/1.8));this.drawPart(ctx,p,.38+.62*u)}
+    }
+    if(sp.a>0){
+      // packed contents inside the shell
+      ctx.save();ctx.beginPath();ctx.arc(sp.x,sp.y,sp.r*.98,0,6.283);ctx.clip();
+      for(const p of this.parts){if(!p.rel){const q={...p,x:sp.x+p.ix*.5*(sp.r/this.R)/.8,y:sp.y+p.iy*.5*(sp.r/this.R)/.8};this.drawPart(ctx,q,.4)}}
+      ctx.restore();
+      ctx.globalAlpha=sp.a;
+      const g=ctx.createRadialGradient(sp.x-sp.r*.3,sp.y-sp.r*.35,sp.r*.1,sp.x,sp.y,sp.r);
+      g.addColorStop(0,'rgba(255,255,255,.26)');g.addColorStop(.7,'rgba(255,255,255,.05)');g.addColorStop(1,'rgba(255,250,235,.24)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(sp.x,sp.y,sp.r,0,6.283);ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=1.2;ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,.85)';ctx.beginPath();ctx.ellipse(sp.x-sp.r*.38,sp.y-sp.r*.42,sp.r*.24,sp.r*.1,-.7,0,6.283);ctx.fill();
+      ctx.strokeStyle='rgba(255,236,190,.45)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(sp.x,sp.y,sp.r*.8,.2,1.3);ctx.stroke();
+      ctx.globalAlpha=1;
+    }
+    for(const s of this.sugar){ctx.fillStyle=`rgba(255,250,235,${.7*(1-s.life/s.max)})`;ctx.beginPath();ctx.arc(s.x,s.y,1.3*k+.4,0,6.283);ctx.fill()}
+    // surface
+    if(lvl>0){
+      ctx.fillStyle=rgba(col.map(v=>Math.min(255,v+30)),.35+.3*tint);
+      ctx.beginPath();ctx.ellipse(cx,sy,sw,sw*.16,0,0,6.283);ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1;ctx.stroke();
+      for(const r of this.ripples){ctx.strokeStyle=`rgba(255,255,255,${r.a})`;ctx.beginPath();ctx.ellipse(cx+topHW*.15,sy,Math.min(r.r,sw*.9),Math.min(r.r,sw*.9)*.16,0,0,6.283);ctx.stroke()}
+    }
+    ctx.restore();
+
+    // pour stream
+    if(this.t>T.pourStart-.15&&this.t<T.pourEnd){
+      const u=clamp((this.t-T.pourStart+.15)/(T.pourEnd-T.pourStart+.15));
+      const w=Math.max(.6,5*k*Math.pow(Math.sin(Math.PI*u),.35));
+      const x0=cx+topHW*1.5,y0=-10,x1=cx+topHW*.15;
+      ctx.strokeStyle='rgba(225,240,245,.55)';ctx.lineWidth=w;ctx.lineCap='round';
+      ctx.beginPath();ctx.moveTo(x0,y0);ctx.quadraticCurveTo(cx+topHW*.5,topY-H*.2,x1,sy);ctx.stroke();
+      ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=w*.3;ctx.beginPath();ctx.moveTo(x0-w*.3,y0);ctx.quadraticCurveTo(cx+topHW*.5-w*.3,topY-H*.2,x1-w*.2,sy);ctx.stroke();
+    }
+
+    // front glass
+    ctx.lineWidth=1.4;ctx.strokeStyle='rgba(244,236,220,.42)';
+    ctx.beginPath();ctx.moveTo(cx-topHW,topY);ctx.lineTo(cx-botHW,botY);ctx.ellipse(cx,botY,botHW,botRY,0,Math.PI,0,true);ctx.lineTo(cx+topHW,topY);ctx.stroke();
+    ctx.strokeStyle='rgba(244,236,220,.6)';ctx.beginPath();ctx.ellipse(cx,topY,topHW,topRY,0,0,6.283);ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.07)';ctx.beginPath();ctx.ellipse(cx,botY,botHW*.96,botRY*.9,0,0,6.283);ctx.fill();
+    const hl=ctx.createLinearGradient(cx-topHW,0,cx-topHW*.55,0);
+    hl.addColorStop(0,'rgba(255,255,255,0)');hl.addColorStop(.5,'rgba(255,255,255,.16)');hl.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=hl;ctx.beginPath();ctx.moveTo(cx-topHW*.92,topY+topRY);ctx.lineTo(cx-topHW*.6,topY+topRY);ctx.lineTo(cx-botHW*.62,botY-botRY);ctx.lineTo(cx-botHW*.9,botY-botRY);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.12)';ctx.beginPath();ctx.moveTo(cx+topHW*.8,topY+topRY*1.5);ctx.lineTo(cx+topHW*.86,topY+topRY*1.5);ctx.lineTo(cx+botHW*.84,botY-botRY*1.5);ctx.lineTo(cx+botHW*.79,botY-botRY*1.5);ctx.fill();
+
+    // steam
+    const st=clamp((this.t-T.pourStart-.6)/1.5)*(0.6+0.4*tint);
+    if(st>0){
+      ctx.lineCap='round';
+      for(let i=0;i<3;i++){
+        const ox=cx+(i-1)*topHW*.38,h=H*.22;
+        const grad=ctx.createLinearGradient(0,topY,0,topY-h);grad.addColorStop(0,`rgba(255,255,255,${.13*st})`);grad.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.strokeStyle=grad;ctx.lineWidth=9*k;ctx.beginPath();
+        for(let j=0;j<=24;j++){const f=j/24,y=topY-topRY-f*h,x=ox+Math.sin(f*5+this.time*1.3+i*2)*10*k*f;j?ctx.lineTo(x,y):ctx.moveTo(x,y)}
+        ctx.stroke();
+      }
+    }
+    // loop fade
+    if(this.loop&&this.t>T.end-.8){ctx.fillStyle=`rgba(11,29,22,${clamp((this.t-(T.end-.8))/.8)})`;ctx.fillRect(0,0,W,H)}
+    if(this.t<.4&&this.loop){ctx.fillStyle=`rgba(11,29,22,${1-this.t/.4})`;ctx.fillRect(0,0,W,H)}
+  }
+}
+
+const drawPart=(ctx,p,s)=>Stage.prototype.drawPart.call(null,ctx,p,s);
+function fitCanvas(c){const r=c.getBoundingClientRect();const d=Math.min(2,devicePixelRatio||1);c.width=Math.round(r.width*d);c.height=Math.round(r.height*d);const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return{W:r.width,H:r.height,ctx:x}}
+function drawShell(ctx,x,y,r,a){
+  ctx.globalAlpha=a;
+  const g=ctx.createRadialGradient(x-r*.3,y-r*.35,r*.1,x,y,r);
+  g.addColorStop(0,'rgba(255,255,255,.24)');g.addColorStop(.7,'rgba(255,255,255,.04)');g.addColorStop(1,'rgba(255,250,235,.26)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,6.283);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.65)';ctx.lineWidth=1.3;ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,.88)';ctx.beginPath();ctx.ellipse(x-r*.38,y-r*.42,r*.24,r*.09,-.7,0,6.283);ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.5)';ctx.beginPath();ctx.ellipse(x+r*.42,y+r*.4,r*.07,r*.035,-.7,0,6.283);ctx.fill();
+  ctx.strokeStyle='rgba(255,236,190,.45)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,r*.82,.2,1.3);ctx.stroke();
+  ctx.globalAlpha=1;
+}
+/* inner contents as points on a sphere, so they can turn in 3D */
+function packContents(mix,n,k){
+  return Array.from({length:n},()=>{const [type,color]=pickWeighted(mix);
+    const base={leaf:[16,24],petal:[11,17],flower:[10,13],floret:[11,15],fruit:[6,9],pearl:[6,8],lav:[10,13]}[type];
+    const u=rnd(-1,1),th=rnd(0,6.283),rr=Math.cbrt(Math.random());
+    return{type,color,size:rnd(base[0],base[1])*k,ux:Math.sqrt(1-u*u)*Math.cos(th)*rr,uy:u*rr,uz:Math.sqrt(1-u*u)*Math.sin(th)*rr,rot:rnd(0,6.283),spin:rnd(-1,1)}});
+}
+
+/* ---------- tea portrait: the sealed crystal, turning slowly ---------- */
+class Portrait{
+  constructor(c){this.c=c;this.t=0;this.vis=false;
+    new ResizeObserver(()=>{Object.assign(this,fitCanvas(c));this.draw()}).observe(c);
+    new IntersectionObserver(e=>{this.vis=e[0].isIntersecting;if(this.vis&&!reduce&&!this.raf){let l=performance.now();const f=n=>{this.t+=Math.min(.05,(n-l)/1000);l=n;this.draw();this.raf=this.vis?requestAnimationFrame(f):null};this.raf=requestAnimationFrame(f)}}).observe(c);
+  }
+  set(tea){this.tea=tea;this.parts=packContents(tea.mix,46,1);this.draw()}
+  draw(){
+    const{ctx,W,H,tea}=this;if(!ctx||!W||!tea)return;ctx.clearRect(0,0,W,H);
+    const R=Math.min(H*.36,W*.3),x=W/2,y=H*.47+Math.sin(this.t*1.1)*4,k=R/90;
+    const L=tea.liquor;
+    const g=ctx.createRadialGradient(x,y+R*1.05,0,x,y+R*1.05,R*1.7);g.addColorStop(0,rgba(L,.45));g.addColorStop(1,rgba(L,0));
+    ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(x,y+R*1.05,R*1.7,R*.32,0,0,6.283);ctx.fill();
+    // sparkles
+    for(let i=0;i<14;i++){const a=i*2.4+this.t*.25,d=R*(1.25+.25*Math.sin(i*1.7+this.t)),tw=.5+.5*Math.sin(this.t*2.2+i*1.3);
+      ctx.fillStyle=`rgba(231,207,156,${.55*tw})`;const sx=x+Math.cos(a)*d,sy=y+Math.sin(a)*d*.8,s=1.2+1.6*tw;
+      ctx.beginPath();ctx.moveTo(sx,sy-s*2);ctx.lineTo(sx+s*.5,sy);ctx.lineTo(sx,sy+s*2);ctx.lineTo(sx-s*.5,sy);ctx.fill();ctx.beginPath();ctx.moveTo(sx-s*2,sy);ctx.lineTo(sx,sy+s*.5);ctx.lineTo(sx+s*2,sy);ctx.lineTo(sx,sy-s*.5);ctx.fill()}
+    // contents
+    const w=this.t*.5,cw=Math.cos(w),sw=Math.sin(w);
+    const pts=this.parts.map(p=>{const px=p.ux*cw+p.uz*sw,pz=-p.ux*sw+p.uz*cw;return{p,px,py:p.uy,pz}}).sort((a,b)=>a.pz-b.pz);
+    ctx.save();ctx.beginPath();ctx.arc(x,y,R*.97,0,6.283);ctx.clip();
+    ctx.fillStyle=rgba(L,.18);ctx.fillRect(x-R,y-R,R*2,R*2);
+    for(const q of pts){const depth=.75+.25*q.pz;ctx.globalAlpha=.55+.45*(q.pz+1)/2;
+      drawPart(ctx,{...q.p,x:x+q.px*R*.72,y:y+q.py*R*.72,rot:q.p.rot+q.p.spin*this.t*.3,size:q.p.size*k},.55*depth)}
+    ctx.restore();ctx.globalAlpha=1;
+    drawShell(ctx,x,y,R,1);
+  }
+}
+
+/* ---------- burst: scroll-scrubbed slow motion ---------- */
+const PHASES=[
+  [.12,'Sealed','Premium tea leaves and edible flowers, locked inside a clear isomalt shell.'],
+  [.3,'Heat','Hot water softens the shell and hairline cracks spread across the crystal.'],
+  [.52,'Burst','The shell gives way and everything inside is released at once.'],
+  [1.01,'Bloom','Leaves unfurl, petals open and the tea colours the water.'],
+];
+class Burst{
+  constructor(sec,c){
+    this.sec=sec;this.c=c;this.p=0;this.time=0;this.playing=null;
+    const mix=[].concat(...TEAS.map(t=>t.mix));
+    this.parts=packContents(mix,130,1).map(p=>{const len=Math.hypot(p.ux,p.uy,p.uz)||1;return{...p,dx:p.ux/len,dy:p.uy/len,dz:p.uz/len,sp:rnd(.45,1),drift:rnd(-1,1)}});
+    this.shards=Array.from({length:34},()=>{const a=rnd(0,6.283),z=rnd(-1,1),n=3+(Math.random()*3|0);
+      return{a,z,sp:rnd(.6,1.3),spin:rnd(-6,6),pts:Array.from({length:n},(_,i)=>{const t=i/n*6.283+rnd(-.3,.3);return[Math.cos(t)*rnd(.5,1),Math.sin(t)*rnd(.5,1)]}),sz:rnd(.16,.34)}});
+    this.cracks=Array.from({length:8},()=>{let a=rnd(0,6.283),r=rnd(0,.5),pts=[];for(let i=0;i<7;i++){pts.push([Math.cos(a)*r,Math.sin(a)*r]);a+=rnd(-.6,.6);r=Math.min(.98,r+rnd(.08,.16))}return pts});
+    this.clouds=Array.from({length:16},(_,i)=>{const a=rnd(0,6.283);return{a,d:rnd(.3,1.6),c:[[204,116,50],[214,124,110],[156,68,36],[222,204,120],[120,150,230]][i%5],r:rnd(.9,1.8)}});
+    this.motes=Array.from({length:40},()=>({x:Math.random(),y:Math.random(),s:rnd(.5,1.6),p:rnd(0,6.28)}));
+    this.ui={phase:document.getElementById('burstPhase'),line:document.getElementById('burstLine'),bar:document.getElementById('burstBar')};
+    new ResizeObserver(()=>{Object.assign(this,fitCanvas(c));this.draw()}).observe(c);
+    new IntersectionObserver(e=>{this.vis=e[0].isIntersecting;if(this.vis)this.loop()}).observe(c);
+    addEventListener('scroll',()=>{if(!this.playing)this.fromScroll()},{passive:true});
+    this.fromScroll();
+  }
+  fromScroll(){const r=this.sec.getBoundingClientRect();this.p=clamp(-r.top/Math.max(1,r.height-innerHeight));if(reduce||!this.vis)this.draw()}
+  play(){this.playing={t0:performance.now()};this.loop()}
+  loop(){if(this.raf)return;let l=performance.now();const f=n=>{this.time+=Math.min(.05,(n-l)/1000);l=n;
+      if(this.playing){const u=(n-this.playing.t0)/5200;this.p=clamp(u);if(u>=1.25){this.playing=null;this.fromScroll()}}
+      this.draw();this.raf=(this.vis&&(!reduce||this.playing))?requestAnimationFrame(f):null};this.raf=requestAnimationFrame(f)}
+  draw(){
+    const{ctx,W,H,p}=this;if(!ctx||!W)return;
+    const ph=PHASES.find(x=>p<x[0]);if(this.ui.phase.textContent!==ph[1]){this.ui.phase.textContent=ph[1];this.ui.line.textContent=ph[2]}
+    this.ui.bar.style.width=(p*100).toFixed(1)+'%';
+    ctx.clearRect(0,0,W,H);
+    const R=Math.min(W,H)*.13,cx=W/2,cy=H*.42,k=R/90,t=this.time;
+    const heat=clamp((p-.1)/.2),bp=clamp((p-.3)/.45),after=clamp((p-.3)/.7);
+    // stage light
+    const sl=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*.6);sl.addColorStop(0,`rgba(231,207,156,${.12+.1*heat})`);sl.addColorStop(1,'rgba(231,207,156,0)');ctx.fillStyle=sl;ctx.fillRect(0,0,W,H);
+    for(const m of this.motes){ctx.fillStyle=`rgba(231,207,156,${.2+.2*Math.sin(t*1.4+m.p)})`;ctx.beginPath();ctx.arc(m.x*W,((m.y-t*.01)%1+1)%1*H,m.s,0,6.283);ctx.fill()}
+    // tea clouds diffusing like ink in water
+    if(after>0)for(const c of this.clouds){const d=R*(.4+c.d*3.2*easeOut(after)),r=R*c.r*(.6+2.4*easeOut(after)),a=.16*Math.min(1,after*3)*(1-.35*after);
+      const x=cx+Math.cos(c.a+t*.05)*d,y=cy+Math.sin(c.a+t*.05)*d*.8;const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,rgba(c.c,a));g.addColorStop(1,rgba(c.c,0));ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2)}
+    const shake=p<.3&&!reduce?heat*heat*3*k:0,sx=cx+Math.sin(t*67)*shake,sy=cy+Math.cos(t*53)*shake*.6;
+    const proj=(q,dist)=>{const z=q.dz*dist,s=1/(1-z/(R*9));return{x:cx+q.dx*dist*s,y:cy+q.dy*dist*s+after*after*R*.4*q.drift,s}};
+    if(p<.3){
+      // glow building inside the sealed crystal
+      const g=ctx.createRadialGradient(sx,sy,0,sx,sy,R*1.6);g.addColorStop(0,`rgba(240,170,90,${.35*heat})`);g.addColorStop(1,'rgba(240,170,90,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(sx,sy,R*1.6,0,6.283);ctx.fill();
+      ctx.save();ctx.beginPath();ctx.arc(sx,sy,R*.97,0,6.283);ctx.clip();
+      const w=t*.4;for(const q of this.parts.slice(0,60)){const px=q.ux*Math.cos(w)+q.uz*Math.sin(w);drawPart(ctx,{...q,x:sx+px*R*.72,y:sy+q.uy*R*.72,size:q.size*k},.5)}
+      ctx.restore();
+      drawShell(ctx,sx,sy,R,1);
+      // cracks
+      if(heat>0){ctx.strokeStyle=`rgba(255,248,230,${.5+.5*heat})`;ctx.lineWidth=1.1;ctx.lineCap='round';
+        for(const cr of this.cracks){const n=Math.max(1,Math.floor(cr.length*heat));ctx.beginPath();cr.slice(0,n).forEach(([a,b],i)=>i?ctx.lineTo(sx+a*R,sy+b*R):ctx.moveTo(sx+a*R,sy+b*R));ctx.stroke()}}
+    }else{
+      // shockwave + flash
+      const sw=clamp((p-.3)/.22);if(sw<1){ctx.strokeStyle=`rgba(255,244,220,${.6*(1-sw)})`;ctx.lineWidth=3*(1-sw)+.5;ctx.beginPath();ctx.ellipse(cx,cy,R*(1+7*easeOut(sw)),R*(1+7*easeOut(sw))*.85,0,0,6.283);ctx.stroke()}
+      const fl=Math.max(0,1-Math.abs(p-.31)/.05);if(fl>0){const g=ctx.createRadialGradient(cx,cy,0,cx,cy,R*4);g.addColorStop(0,`rgba(255,250,235,${.9*fl})`);g.addColorStop(1,'rgba(255,250,235,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
+      // contents fly out, back to front
+      const far=Math.min(W,H)*.48;
+      const list=this.parts.map(q=>({q,...proj(q,R*.5+far*q.sp*easeOut(bp)+after*R*.3)})).sort((a,b)=>a.q.dz-b.q.dz);
+      for(const o of list){const q=o.q;ctx.globalAlpha=Math.min(1,.55+.45*(q.dz+1)/2);
+        drawPart(ctx,{...q,x:o.x+Math.sin(t*.8+q.rot)*after*6*k,y:o.y,rot:q.rot+q.spin*4*easeOut(bp)+t*.15*q.spin,size:q.size*k*o.s},.5+.9*easeOutBack(clamp(bp*1.3)))}
+      ctx.globalAlpha=1;
+      // shards of isomalt
+      const sa=1-clamp((p-.4)/.3);if(sa>0)for(const s of this.shards){
+        const d=R+Math.min(W,H)*.55*s.sp*easeOut(bp),q={dx:Math.cos(s.a)*Math.sqrt(1-s.z*s.z),dy:Math.sin(s.a)*Math.sqrt(1-s.z*s.z),dz:s.z,drift:0};
+        const o=proj(q,d),size=R*s.sz*o.s;
+        ctx.save();ctx.translate(o.x,o.y);ctx.rotate(s.a+s.spin*bp);ctx.globalAlpha=sa;
+        ctx.beginPath();s.pts.forEach(([a,b],i)=>i?ctx.lineTo(a*size,b*size):ctx.moveTo(a*size,b*size));ctx.closePath();
+        ctx.fillStyle='rgba(255,255,255,.16)';ctx.fill();ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1;ctx.stroke();
+        ctx.strokeStyle='rgba(255,236,190,.8)';ctx.beginPath();ctx.moveTo(s.pts[0][0]*size,s.pts[0][1]*size);ctx.lineTo(s.pts[1][0]*size,s.pts[1][1]*size);ctx.stroke();
+        ctx.restore()}
+      ctx.globalAlpha=1;
+    }
+  }
+}
+const burst=new Burst(document.getElementById('burst'),document.getElementById('burstCanvas'));
+document.getElementById('burstPlay').addEventListener('click',()=>burst.play());
+const portrait=new Portrait(document.getElementById('teaPortrait'));
+
+/* ---------- hero ---------- */
+const root=document.documentElement;
+let heroIdx=0;
+const heroNow=document.getElementById('heroNow');
+const hero=new Stage(document.getElementById('heroCanvas'),{spotlight:true,loop:true,onEnd:()=>{heroIdx=(heroIdx+1)%TEAS.length;setHero()}});
+function setHero(){const t=TEAS[heroIdx];hero.setTea(t);heroNow.textContent=t.name;heroNow.style.color=t.ui}
+setHero();
+document.getElementById('heroReplay').addEventListener('click',()=>{hero.reset();if(reduce){hero.fastForward(T.end-1.5);hero.draw()}});
+
+/* ---------- tea selector ---------- */
+const tabs=document.getElementById('teaTabs');
+const tea=new Stage(document.getElementById('teaCanvas'));
+const dl=document.getElementById('dayline');
+dl.innerHTML=`<defs><linearGradient id="sky" x1="0" x2="1"><stop offset="0" stop-color="#e7d58a"/><stop offset=".3" stop-color="#9cc0ee"/><stop offset=".55" stop-color="#f0a050"/><stop offset=".78" stop-color="#e88a8f"/><stop offset="1" stop-color="#5b67c9"/></linearGradient></defs>
+<path d="M10 50 Q 250 -24 490 50" fill="none" stroke="url(#sky)" stroke-width="2" opacity=".8"/>
+${TEAS.map((t,i)=>{const x=10+i*120,y=50-74*(1-Math.pow((x-250)/240,2))*.5;return`<circle cx="${x}" cy="${y.toFixed(1)}" r="3" fill="${t.ui}" opacity=".6"/>`}).join('')}
+<circle id="sun" r="8" fill="#f4ecdc"><animate attributeName="r" values="7;9;7" dur="3s" repeatCount="indefinite"/></circle>`;
+const sun=dl.querySelector('#sun');
+TEAS.forEach((t,i)=>{
+  const b=document.createElement('button');b.className='tea-tab';b.type='button';b.setAttribute('role','tab');b.id='tab-'+t.id;
+  b.setAttribute('aria-controls','teaPanel');b.style.setProperty('--c',t.ui);b.innerHTML=`<i></i>${t.name}`;
+  b.addEventListener('click',()=>selectTea(i,true));
+  b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=(i+(e.key==='ArrowRight'?1:-1)+TEAS.length)%TEAS.length;selectTea(n,true);tabs.children[n].focus()}});
+  tabs.appendChild(b);
+});
+function selectTea(i,user){
+  const t=TEAS[i];
+  [...tabs.children].forEach((b,j)=>{b.setAttribute('aria-selected',j===i);b.tabIndex=j===i?0:-1});
+  document.getElementById('teaName').textContent=t.name;
+  document.getElementById('teaCap').textContent='Crystaltea · '+t.name;
+  const img=document.getElementById('teaImg');
+  if(t.photo){img.src=t.photo;img.alt=t.name+' crystaltea';img.hidden=false}else{img.hidden=true;img.removeAttribute('src')}
+  portrait.set(t);
+  document.getElementById('teaWhen').textContent='Best for · '+t.when;
+  document.getElementById('teaMood').textContent=t.mood;
+  document.getElementById('teaIng').innerHTML=t.ing.map((x,j)=>`<li style="animation-delay:${j*45}ms">${x}</li>`).join('');
+  document.getElementById('teaPanel').setAttribute('aria-labelledby','tab-'+t.id);
+  root.style.setProperty('--tea',t.ui);
+  const x=10+i*120,y=50-74*(1-Math.pow((x-250)/240,2))*.5;
+  sun.setAttribute('cx',x);sun.setAttribute('cy',y.toFixed(1));sun.setAttribute('fill',t.ui);
+  tea.setTea(t);
+  try{if(user)localStorage.setItem('bb-tea',t.id)}catch(e){}
+}
+let start=0;try{const s=localStorage.getItem('bb-tea');const j=TEAS.findIndex(t=>t.id===s);if(j>=0)start=j}catch(e){}
+selectTea(start,false);
+document.getElementById('teaReplay').addEventListener('click',()=>{tea.reset();if(reduce){tea.fastForward(T.end-1.5);tea.draw()}});
+
+/* ---------- gifts ---------- */
+const GIFTS=[
+  {img:'img/golden-crescent.jpg',name:'Golden Crescent Box',size:'11 × 11 × 12.5 cm',price:'IDR 85K',items:'1 premium crystaltea and 1 travel prayer mat'},
+  {img:'img/royal-pavilion.jpg',name:'Royal Pavilion Lantern',size:'14.3 (D) × 22 cm',price:'IDR 369K',items:'3 premium crystalteas, 1 sand candle and 1 garlic peanut jar'},
+  {img:'img/taj-mahal.jpg',name:'Taj Mahal Drawer',size:'30.5 × 21.5 × 7.5 cm',price:'IDR 455K',items:'8 premium crystalteas and 1 travel prayer mat'},
+  {img:'img/oasis-theater.jpg',name:'Oasis Dream Theater',size:'23.5 × 25.5 × 10 cm',price:'IDR 625K',items:'6 premium crystalteas and 1 aromatic diffuser'},
+  {img:'img/turquoise-palace.jpg',name:'Turquoise Palace',size:'23 × 22 × 8 cm',price:'IDR 763K',items:'5 premium crystalteas, 1 aromatic diffuser and 1 sand candle'},
+];
+GIFTS.unshift({img:'img/christmas-wreath.jpg',name:'Christmas Wreath',size:'Christmas edition',price:'',items:'Crystalteas in clear domes with velvet bows, set in a pine wreath'});
+const card=g=>`<article class="gift"><div class="ph"><img src="${g.img}" alt="${g.name} hamper by Bloombliss" loading="lazy" width="760" height="950"></div>
+<div class="body"><div class="row"><span>${g.size}</span><span class="price">${g.price}</span></div><h3>${g.name}</h3><p>${g.items}</p></div></article>`;
+const set=GIFTS.map(card).join('');
+document.getElementById('hamperTrack').innerHTML=`<div class="hamper-set">${set}</div><div class="hamper-set" aria-hidden="true">${set}</div>`;
+
+/* ---------- copy buttons ---------- */
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
+  const el=document.getElementById(b.dataset.copy);const txt=el.textContent.trim();
+  const done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1600)};
+  const sel=()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected';setTimeout(()=>b.textContent='Copy',1600)};
+  try{navigator.clipboard.writeText(txt).then(done,sel)}catch(e){sel()}
+}));
+
+/* ---------- drifting petals behind the story ---------- */
+const pc=document.getElementById('petalsBg');const px=pc.getContext('2d');let pw=0,ph=0,pv=false;
+const fl=Array.from({length:22},()=>({x:Math.random(),y:Math.random(),r:rnd(4,9),s:rnd(.01,.03),a:rnd(0,6.28),c:['#e6a19a','#d0aa62','#86aee8','#f2a33a'][Math.random()*4|0]}));
+function pres(){const r=pc.getBoundingClientRect();const d=Math.min(2,devicePixelRatio||1);pw=r.width;ph=r.height;pc.width=pw*d;pc.height=ph*d;px.setTransform(d,0,0,d,0,0)}
+new ResizeObserver(()=>{pres();pdraw(0)}).observe(pc);
+function pdraw(dt){px.clearRect(0,0,pw,ph);for(const f of fl){f.y+=f.s*dt;f.a+=dt*.6;if(f.y>1.05){f.y=-.05;f.x=Math.random()}
+  px.save();px.translate(f.x*pw+Math.sin(f.a)*20,f.y*ph);px.rotate(f.a);px.fillStyle=f.c;px.globalAlpha=.55;px.beginPath();px.ellipse(0,0,f.r,f.r*.45,0,0,6.283);px.fill();px.restore()}}
+if(!reduce){let pl=0;const loop=n=>{const dt=Math.min(.05,(n-pl)/1000);pl=n;pdraw(dt);if(pv)requestAnimationFrame(loop);else pl=0};
+  new IntersectionObserver(e=>{const was=pv;pv=e[0].isIntersecting;if(pv&&!was){pl=performance.now();requestAnimationFrame(loop)}}).observe(pc)}
+
+/* ---------- count-up + rise ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;io.unobserve(el);
+  el.classList.remove('pre');
+  el.querySelectorAll('[data-count]').forEach(v=>{const end=+v.dataset.count,small=v.querySelector('small').outerHTML;let t0=null;
+    const f=n=>{t0??=n;const u=clamp((n-t0)/900);v.innerHTML=Math.round(end*easeOut(u))+small;if(u<1)requestAnimationFrame(f)};if(!reduce)requestAnimationFrame(f)})
+}),{threshold:.15});
+const vh=innerHeight;
+document.querySelectorAll('.rise').forEach(el=>{if(!reduce&&el.getBoundingClientRect().top>vh)el.classList.add('pre');io.observe(el)});
+})();
+</script>
+</body>
+</html>
