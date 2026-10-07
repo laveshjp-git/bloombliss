@@ -130,6 +130,21 @@ section{scroll-margin-top:70px}
 @keyframes photoIn{from{transform:scale(1.06);opacity:0}}
 .tea-photo figcaption{position:absolute;left:14px;bottom:12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);background:rgba(11,29,22,.55);padding:5px 9px;border-radius:999px}
 
+
+/* film: the brand video grows from a card to fill the screen */
+.film{position:relative;height:320vh;background:var(--stage)}
+.film .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:grid;place-items:center}
+.film .frame{position:relative;width:min(78vw,calc(72vh * .5625));aspect-ratio:9/16;max-width:100%;border-radius:28px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);will-change:width,height,border-radius;background:var(--stage-2)}
+.film video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(var(--z,1.12))}
+.film .veil{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 40%,transparent 40%,rgba(11,29,22,.7) 100%),linear-gradient(180deg,rgba(11,29,22,.35),transparent 30%,transparent 60%,rgba(11,29,22,.75));pointer-events:none}
+.film .lines{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;padding-inline:var(--gutter)}
+.film .lines p{grid-area:1/1;font-family:var(--f-display);font-size:clamp(40px,8vw,120px);line-height:1;text-align:center;color:var(--cream);text-wrap:balance;opacity:0;transform:translateY(24px);transition:opacity .6s,transform .8s cubic-bezier(.2,.7,.2,1);text-shadow:0 4px 40px rgba(0,0,0,.45)}
+.film .lines p.on{opacity:1;transform:none}
+.film .lines p em{font-style:normal;color:var(--gold)}
+.film .tag{position:absolute;left:var(--gutter);bottom:calc(env(safe-area-inset-bottom,0px) + 24px);font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft)}
+.film .snd{position:absolute;right:var(--gutter);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);appearance:none;border:1px solid var(--line);background:rgba(11,29,22,.6);color:var(--gold-soft);border-radius:999px;padding:8px 14px;font:500 13px/1 var(--f-body);cursor:pointer}
+.film.missing{display:none}
+
 /* burst */
 .burst{position:relative;height:260vh;background:var(--stage)}
 .burst .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:grid}
@@ -272,6 +287,25 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 <div class="marquee" aria-hidden="true">
   <div class="track" id="marquee"></div>
 </div>
+
+
+<section class="film" id="film" aria-label="Bloombliss film">
+  <div class="pin">
+    <div class="frame" id="filmFrame">
+      <video id="filmVideo" muted loop playsinline preload="metadata" poster="img/christmas-wreath.jpg">
+        <source src="video/bloombliss.mp4" type="video/mp4">
+      </video>
+      <div class="veil"></div>
+    </div>
+    <div class="lines" aria-live="off">
+      <p class="on">Handmade <em>crystals</em></p>
+      <p>Poured with <em>care</em></p>
+      <p>Made to <em>bloom</em></p>
+    </div>
+    <span class="tag">Bloombliss · the film</span>
+    <button class="snd" id="filmToggle" type="button">Pause</button>
+  </div>
+</section>
 
 <section id="ritual" class="sec">
   <div class="wrap">
@@ -847,6 +881,24 @@ class Burst{
 const burst=new Burst(document.getElementById('burst'),document.getElementById('burstCanvas'));
 document.getElementById('burstPlay').addEventListener('click',()=>burst.play());
 const portrait=new Portrait(document.getElementById('teaPortrait'));
+
+
+/* ---------- film: scroll grows the video to full screen ---------- */
+(()=>{const sec=document.getElementById('film'),fr=document.getElementById('filmFrame'),v=document.getElementById('filmVideo'),btn=document.getElementById('filmToggle');
+  const lines=[...sec.querySelectorAll('.lines p')];let vis=false;
+  v.querySelector('source').addEventListener('error',()=>sec.classList.add('missing'));
+  const upd=()=>{const r=sec.getBoundingClientRect(),p=clamp(-r.top/Math.max(1,r.height-innerHeight));
+    const grow=easeInOut(clamp(p/.45));const W=innerWidth,H=innerHeight;
+    const w0=Math.min(W*.78,H*.72*.5625),h0=w0/.5625;
+    fr.style.width=lerp(w0,W,grow)+'px';fr.style.height=lerp(h0,H,grow)+'px';fr.style.aspectRatio='auto';
+    fr.style.borderRadius=lerp(28,0,grow)+'px';v.style.setProperty('--z',(1.12-.12*grow).toFixed(3));
+    const idx=p<.3?0:p<.65?1:2;lines.forEach((l,i)=>l.classList.toggle('on',i===idx))};
+  addEventListener('scroll',()=>{if(vis)requestAnimationFrame(upd)},{passive:true});addEventListener('resize',upd);
+  new IntersectionObserver(e=>{vis=e[0].isIntersecting;if(vis){upd();if(!reduce&&!v.dataset.paused)v.play().catch(()=>{})}else v.pause()},{threshold:0}).observe(sec);
+  btn.addEventListener('click',()=>{if(v.paused){v.play();delete v.dataset.paused;btn.textContent='Pause'}else{v.pause();v.dataset.paused=1;btn.textContent='Play'}});
+  if(reduce){btn.textContent='Play';v.dataset.paused=1}
+  upd();
+})();
 
 /* ---------- hero ---------- */
 const root=document.documentElement;
